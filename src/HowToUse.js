@@ -8,7 +8,7 @@ function HowToUse() {
       <h1>How to Use Wordle Solver</h1>
       <p>First things first, I do not claim that this app will always give you the correct answer in 6 tries.
           
-          But most of the time, it does. </p><p> For Example: If the word is SHARE, this app does not solve it in 6 tries.
+          But most of the time, it does. </p><p> For Example: If the word is SHAPE, this app does not solve it in 6 tries.
       </p>
       <p>I have used the <a href="https://static.nytimes.com/newsgraphics/2022/01/25/wordle-solver/assets/solutions.txt" >list of words shared by NYT</a> as my source</p>
       <p>As the NYT Wordlebot suggests, my starting guess is always CRANE</p>

@@ -83,6 +83,8 @@ function App() {
 
   function getNextWord() {
     let prevResult = "";
+    let found = false;
+    let allPosibilities = [];
     for (let i = 0; i < 5; i++) {
       const buttonElement = document.getElementById(
         "button" + guessCount + (i + 1)
@@ -156,13 +158,18 @@ function App() {
           }
         }
       }
-      if (isSolution) {
+      if (isSolution && !found) {
         lastIndex = i + 1;
         prevWord = word;
-        break;
+        allPosibilities.push(word);
+        found= true;
+        //break;
+      } else if(isSolution && found){
+        allPosibilities.push(word);
       }
     }
     console.log("Please try " + prevWord + " as your next guess");
+    console.log(allPosibilities.join(','));
     ++guessCount;
     for (let k = 0; k < 5; k++) {
       let btn = document.getElementById("button" + guessCount + (k + 1));
@@ -189,7 +196,7 @@ function App() {
                   fontWeight: "bold",
                 }}> How to Use</button>
     <div className="App" style={{ margin: "50px" }}>
-              {[1, 2, 3, 4, 5].map((b) => {
+              {[1, 2, 3, 4, 5, 6].map((b) => {
                 const visibility = b === 1 ? "visible" : "hidden";
                 return (
                   <React.Fragment>
