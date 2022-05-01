@@ -188,7 +188,7 @@ function App() {
                   border: "1px solid white",
                   fontWeight: "bold",
                 }}> How to Use</button>
-    <div className="App" style={{ margin: "100px" }}>
+    <div className="App" style={{ margin: "50px" }}>
               {[1, 2, 3, 4, 5].map((b) => {
                 const visibility = b === 1 ? "visible" : "hidden";
                 return (
