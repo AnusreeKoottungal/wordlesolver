@@ -189,12 +189,6 @@ function App() {
                   fontWeight: "bold",
                 }}> How to Use</button>
     <div className="App" style={{ margin: "100px" }}>
-      
-      
-      <table>
-        <tbody>
-          <tr>
-            <td>
               {[1, 2, 3, 4, 5].map((b) => {
                 const visibility = b === 1 ? "visible" : "hidden";
                 return (
@@ -222,8 +216,7 @@ function App() {
                   </React.Fragment>
                 );
               })}
-            </td>
-            <td style={{ width: "500px", alignItems: "center" }}>
+            <div style={{ width: "500px", alignItems: "center" }}>
               <input
                 type="button"
                 style={{
@@ -238,10 +231,7 @@ function App() {
                 onClick={getNextWord}
                 value="Show Next Guess"
               />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
     </div>
     </React.Fragment>
   );
