@@ -153,7 +153,7 @@ function App() {
       }
       if (isSolution) {
         for (let j = 0; j < incorrectPosLetters.length; j++) {
-          if (!word.includes(incorrectPosLetters[j] && !correctPosLetters.includes(incorrectPosLetters[j]))) {
+          if (!word.includes(incorrectPosLetters[j])) {
             isSolution = false;
           }
         }
@@ -170,12 +170,6 @@ function App() {
     }
     console.log("Please try " + prevWord + " as your next guess");
     console.log(allPosibilities.join(','));
-    let possibilitiesText = allPosibilities.length + " possibile solutions remaining";
-    if(allPosibilities.length > 0 && allPosibilities.length <5){
-      possibilitiesText+= ": " + allPosibilities.join(", ").toUpperCase();
-    }
-    document.getElementById("possibilities").innerText = possibilitiesText;
-
     ++guessCount;
     for (let k = 0; k < 5; k++) {
       let btn = document.getElementById("button" + guessCount + (k + 1));
@@ -230,7 +224,6 @@ function App() {
                 );
               })}
             <div style={{ width: "500px", alignItems: "center" }}>
-              <div id="possibilities" style={{ color: "white"}}></div>
               <input
                 type="button"
                 style={{
