@@ -116,9 +116,17 @@ function App() {
         }
         correctPosMap.set(i, prevWord[i]);
       } else if (prevResult[i] === "n") {
-        invalidLetters.push(prevWord[i]);
-        invalidLetters = [...new Set(invalidLetters)];
-      } else {
+        if (
+          !correctPosLetters.includes(prevWord[i]) &&
+          !incorrectPosLetters.includes(prevWord[i])
+        ) {
+          invalidLetters.push(prevWord[i]);
+          invalidLetters = [...new Set(invalidLetters)];
+        } else{
+          prevResult = prevResult.substring(0, i) + 'x' + prevResult.substring(i + 1);
+        }
+      } 
+      if (prevResult[i] === "x") {
         incorrectPosLetters.push(prevWord[i]);
         incorrectPosLetters = [...new Set(incorrectPosLetters)];
         incorrect.push(prevWord[i]);
@@ -195,23 +203,30 @@ function App() {
           correctPosLetters.length +
           " letters to be in correct place.\n";
       }
-      if (incorrectPosLetters.length > 0) {
-        hintText =
-          hintText +
-          "The letters " +
-          incorrectPosLetters.join(", ").toUpperCase() +
-          " are present in the word, but we are not yet sure of their position.\n";
-      }
+      // if (incorrectPosLetters.length > 0) {
+      //   hintText =
+      //     hintText +
+      //     "The letters " +
+      //     incorrectPosLetters.join(", ").toUpperCase() +
+      //     " are present in the word, but we are not yet sure of their position.\n";
+      // }
       if (correctPosLetters.length === 0 && incorrectPosLetters.length === 0) {
         hintText =
           hintText +
           "Unfortunately, we have not found any letters which are present in the word.\n";
       }
-      if(allPosibilities.length > 5){
-        hintText+= "There are "+ allPosibilities.length + " remaining wordle solutions.\n";
+      if (allPosibilities.length > 5) {
+        hintText +=
+          "There are " +
+          allPosibilities.length +
+          " remaining wordle solutions.\n";
       } else {
-        hintText+= "We have narrowed down our Wordle solutions to "+ allPosibilities.length + " words.\n"+
-        allPosibilities.join(", ").toUpperCase() + "\n";
+        hintText +=
+          "We have narrowed down our Wordle solutions to " +
+          allPosibilities.length +
+          " words.\n" +
+          allPosibilities.join(", ").toUpperCase() +
+          "\n";
       }
       hintText += "Lets try " + prevWord.toUpperCase() + " as our next guess.";
 
@@ -220,7 +235,11 @@ function App() {
 
     for (let k = 0; k < 5; k++) {
       let btn = document.getElementById("button" + guessCount + (k + 1));
-      const color = allPosibilities.length === 1 || correctPosMap.get(k)? "green" : "black";
+      const color =
+        guessCount === 5 && allPosibilities.length > 0 ? 'red':
+        allPosibilities.length === 1 || correctPosMap.get(k)
+          ? "green"
+          : "black";
 
       if (btn) {
         btn.style.background = color;
@@ -230,6 +249,11 @@ function App() {
       if (guessDiv) {
         guessDiv.style.visibility = "visible";
       }
+    }
+    if( guessCount === 5 && allPosibilities.length > 0){
+      hintText = "ALERT!!! We have "+ allPosibilities.length + " possible solutions, but only one try left.\n"+
+      "Please use caution and pick your next guess from: " + allPosibilities.join(", ").toUpperCase();
+      hintElement.innerText = hintText;
     }
     if (allPosibilities.length === 1) {
       hintText = "Congratulations! We have found our answer!";
