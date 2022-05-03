@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 function App() {
   let [possibleWords, setPossibleWords] = useState(null);
@@ -109,7 +109,7 @@ function App() {
         incorrect = [];
       }
       if (prevResult[i] === "y") {
-        correctPosLetters.push(prevResult[i]);
+        correctPosLetters.push(prevWord[i]);
         correctPosLetters = [...new Set(correctPosLetters)];
         if (!correctPosMap.get(i)) {
           correctPosMap.set(i, prevWord[i]);
@@ -162,19 +162,67 @@ function App() {
         lastIndex = i + 1;
         prevWord = word;
         allPosibilities.push(word);
-        found= true;
+        found = true;
         //break;
-      } else if(isSolution && found){
+      } else if (isSolution && found) {
         allPosibilities.push(word);
       }
     }
-    console.log("Please try " + prevWord + " as your next guess");
-    console.log(allPosibilities.join(','));
+    console.log("Please try " + prevWord + " as your next guess.");
+    console.log(allPosibilities.join(","));
     ++guessCount;
+
+    const hintElement = document.getElementById("hint");
+    let hintText = "";
+    if (allPosibilities.length === 0) {
+      hintText =
+        "UhOh! There are no Wordle solutions for the inputs you provided.\nIt is likely that you marked one or more squares incorrectly.\nPlease refresh and try again!";
+      document.getElementById("nextGuessBtn").style.visibility = "hidden";
+      hintElement.innerText = hintText;
+      return;
+    }
+    if (allPosibilities.length > 1) {
+      if (correctPosLetters.length === 5) {
+        hintText = "Congratulations! We have found our answer!";
+        document.getElementById("nextGuessBtn").style.visibility = "hidden";
+        hintElement.innerText = hintText;
+        return;
+      }
+      if (correctPosLetters.length > 0) {
+        hintText =
+          hintText +
+          "We have found " +
+          correctPosLetters.length +
+          " letters to be in correct place.\n";
+      }
+      if (incorrectPosLetters.length > 0) {
+        hintText =
+          hintText +
+          "The letters " +
+          incorrectPosLetters.join(", ").toUpperCase() +
+          " are present in the word, but we are not yet sure of their position.\n";
+      }
+      if (correctPosLetters.length === 0 && incorrectPosLetters.length === 0) {
+        hintText =
+          hintText +
+          "Unfortunately, we have not found any letters which are present in the word.\n";
+      }
+      if(allPosibilities.length > 5){
+        hintText+= "There are "+ allPosibilities.length + " remaining wordle solutions.\n";
+      } else {
+        hintText+= "We have narrowed down our Wordle solutions to "+ allPosibilities.length + " words.\n"+
+        allPosibilities.join(", ").toUpperCase() + "\n";
+      }
+      hintText += "Lets try " + prevWord.toUpperCase() + " as our next guess.";
+
+      hintElement.innerText = hintText;
+    }
+
     for (let k = 0; k < 5; k++) {
       let btn = document.getElementById("button" + guessCount + (k + 1));
+      const color = allPosibilities.length === 1 ? "green" : "black;";
       if (btn) {
-        btn.style.background = "black";
+        btn.style.background = color;
         btn.value = prevWord[k].toUpperCase();
       }
       const guessDiv = document.getElementById("guess" + guessCount);
@@ -182,64 +230,80 @@ function App() {
         guessDiv.style.visibility = "visible";
       }
     }
+    if (allPosibilities.length === 1) {
+      hintText = "Congratulations! We have found our answer!";
+      document.getElementById("nextGuessBtn").style.visibility = "hidden";
+      hintElement.innerText = hintText;
+      return;
+    }
   }
 
   return (
     <React.Fragment>
-      <button onClick={() => navigate('/howto')} style={{
-                  width: "150px",
-                  height: "35px",
-                  margin: "10px",
-                  color: "white",
-                  background: "black",
-                  border: "1px solid white",
-                  fontWeight: "bold",
-                }}> How to Use</button>
-    <div className="App" style={{ margin: "50px" }}>
-              {[1, 2, 3, 4, 5, 6].map((b) => {
-                const visibility = b === 1 ? "visible" : "hidden";
-                return (
-                  <React.Fragment>
-                    <div
-                      id={"guess" + b}
-                      className="guess"
-                      key={"guess" + b}
-                      style={{ visibility: visibility }}
-                    >
-                      {[1, 2, 3, 4, 5].map((a) => {
-                        const buttonName = "button" + b + a;
-                        return (
-                          <input
-                            type="button"
-                            id={buttonName}
-                            key={buttonName}
-                            onClick={() => setColor(buttonName, "blue")}
-                          />
-                        );
-                      })}
-                      <br />
-                      <br />
-                    </div>
-                  </React.Fragment>
-                );
-              })}
-            <div style={{ width: "500px", alignItems: "center" }}>
-              <input
-                type="button"
-                style={{
-                  width: "150px",
-                  height: "35px",
-                  margin: "100px",
-                  color: "white",
-                  background: "black",
-                  border: "1px solid white",
-                  fontWeight: "bold",
-                }}
-                onClick={getNextWord}
-                value="Show Next Guess"
-              />
-            </div>
-    </div>
+      <button
+        onClick={() => navigate("/howto")}
+        style={{
+          width: "150px",
+          height: "35px",
+          margin: "10px",
+          color: "white",
+          background: "black",
+          border: "1px solid white",
+          fontWeight: "bold",
+        }}
+      >
+        {" "}
+        How to Use
+      </button>
+      <div className="App" style={{ margin: "50px" }}>
+        <p id="hint" style={{ height: "95px", color: "white" }}>
+          Let's start with CRANE.
+        </p>
+        {[1, 2, 3, 4, 5, 6].map((b) => {
+          const visibility = b === 1 ? "visible" : "hidden";
+          return (
+            <React.Fragment>
+              <div
+                id={"guess" + b}
+                className="guess"
+                key={"guess" + b}
+                style={{ visibility: visibility }}
+              >
+                {[1, 2, 3, 4, 5].map((a) => {
+                  const buttonName = "button" + b + a;
+                  return (
+                    <input
+                      type="button"
+                      id={buttonName}
+                      key={buttonName}
+                      onClick={() => setColor(buttonName, "blue")}
+                    />
+                  );
+                })}
+                <br />
+                <br />
+              </div>
+            </React.Fragment>
+          );
+        })}
+        <div style={{ width: "500px", alignItems: "center" }}>
+          <input
+            id="nextGuessBtn"
+            type="button"
+            style={{
+              width: "150px",
+              height: "35px",
+              margin: "100px",
+              color: "white",
+              background: "black",
+              border: "1px solid white",
+              fontWeight: "bold",
+            }}
+            onClick={getNextWord}
+            value="Show Next Guess"
+          />
+        </div>
+      </div>
     </React.Fragment>
   );
 }
