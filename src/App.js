@@ -257,7 +257,7 @@ function App() {
         How to Use
       </button>
       <div className="App" style={{ margin: "50px" }}>
-        <p id="hint" style={{ height: "105px", color: "white" }}>
+        <p id="hint" style={{ color: "white" }}>
           Let's start with CRANE.
         </p>
         {[1, 2, 3, 4, 5, 6].map((b) => {
