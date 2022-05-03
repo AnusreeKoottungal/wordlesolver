@@ -174,6 +174,12 @@ function App() {
 
     const hintElement = document.getElementById("hint");
     let hintText = "";
+    if (correctPosLetters.length === 5) {
+      hintText = "Congratulations! We have found our answer!";
+      document.getElementById("nextGuessBtn").style.visibility = "hidden";
+      hintElement.innerText = hintText;
+      return;
+    }
     if (allPosibilities.length === 0) {
       hintText =
         "UhOh! There are no Wordle solutions for the inputs you provided.\nIt is likely that you marked one or more squares incorrectly.\nPlease refresh and try again!";
@@ -182,12 +188,6 @@ function App() {
       return;
     }
     if (allPosibilities.length > 1) {
-      if (correctPosLetters.length === 5) {
-        hintText = "Congratulations! We have found our answer!";
-        document.getElementById("nextGuessBtn").style.visibility = "hidden";
-        hintElement.innerText = hintText;
-        return;
-      }
       if (correctPosLetters.length > 0) {
         hintText =
           hintText +
@@ -220,7 +220,8 @@ function App() {
 
     for (let k = 0; k < 5; k++) {
       let btn = document.getElementById("button" + guessCount + (k + 1));
-      const color = allPosibilities.length === 1 ? "green" : "black;";
+      const color = allPosibilities.length === 1 || correctPosMap.get(k)? "green" : "black";
+
       if (btn) {
         btn.style.background = color;
         btn.value = prevWord[k].toUpperCase();
@@ -256,7 +257,7 @@ function App() {
         How to Use
       </button>
       <div className="App" style={{ margin: "50px" }}>
-        <p id="hint" style={{ height: "95px", color: "white" }}>
+        <p id="hint" style={{ height: "105px", color: "white" }}>
           Let's start with CRANE.
         </p>
         {[1, 2, 3, 4, 5, 6].map((b) => {
@@ -293,7 +294,8 @@ function App() {
             style={{
               width: "150px",
               height: "35px",
-              margin: "100px",
+              marginLeft: "100px",
+              marginRight: "100px",
               color: "white",
               background: "black",
               border: "1px solid white",
